@@ -131,6 +131,11 @@ dist
 # turbo
 .turbo
 
+# local sqlite
+*.db
+*.db-*
+*.sqlite
+
 # yarn v3
 .pnp.*
 .yarn/*
