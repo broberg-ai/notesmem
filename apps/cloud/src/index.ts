@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { ingest } from "./routes/ingest";
+import { uploads } from "./routes/uploads";
 
 export const app = new Hono();
 
@@ -8,6 +9,7 @@ app.get("/health", (c) =>
 );
 
 app.route("/ingest", ingest);
+app.route("/uploads", uploads);
 
 export default {
   port: Number(process.env.PORT ?? 3000),

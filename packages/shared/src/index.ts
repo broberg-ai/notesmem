@@ -10,7 +10,7 @@ export const NoteSource = z.enum([
 ]);
 export type NoteSource = z.infer<typeof NoteSource>;
 
-/** An image (or other) blob attached to a note, hosted on Tigris. */
+/** An image (or other) blob attached to a note, hosted on Cloudflare R2 (EU). */
 export const AttachmentSchema = z.object({
   id: z.string(),
   url: z.string().url(),
