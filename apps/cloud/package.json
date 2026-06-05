@@ -11,6 +11,7 @@
     "db:migrate": "bun run src/db/migrate.ts"
   },
   "dependencies": {
+    "@notesmem/adapters": "workspace:*",
     "@notesmem/shared": "workspace:*",
     "drizzle-orm": "^0.36.4",
     "hono": "^4.6.10",

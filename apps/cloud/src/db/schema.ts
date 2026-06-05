@@ -24,6 +24,21 @@ export const attachments = sqliteTable("attachments", {
   height: integer("height"),
 });
 
+/** Configured outbound receivers. F05 dashboard manages this; F02 fan-out reads it. */
+export const adapters = sqliteTable("adapters", {
+  name: text("name").primaryKey(),
+  type: text("type").notNull(),
+  url: text("url"),
+  token: text("token"),
+  method: text("method").notNull().default("POST"),
+  fieldMapping: text("field_mapping", { mode: "json" }).$type<
+    Record<string, string>
+  >(),
+  inDefaultFanout: integer("in_default_fanout", { mode: "boolean" })
+    .notNull()
+    .default(true),
+});
+
 /** Per-(note, adapter) delivery state for the fan-out log. */
 export const deliveries = sqliteTable("deliveries", {
   id: text("id").primaryKey(),

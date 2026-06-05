@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { IngestNoteSchema } from "@notesmem/shared";
 import { db, schema } from "../db/index";
 import { requireDeviceToken } from "../auth";
+import { fanout } from "../fanout";
 
 export const ingest = new Hono();
 
@@ -49,5 +50,17 @@ ingest.post("/", requireDeviceToken, async (c) => {
       .run();
   }
 
-  return c.json({ id, createdAt }, 201);
+  // Fan out to the configured adapters (target-override wins over default set).
+  const deliveries = await fanout(
+    id,
+    {
+      text: note.text,
+      tags: note.tags ?? [],
+      source: note.source,
+      imageUrls: note.imageUrls ?? [],
+    },
+    note.target,
+  );
+
+  return c.json({ id, createdAt, deliveries }, 201);
 });
