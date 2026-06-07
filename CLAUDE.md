@@ -1,22 +1,32 @@
-# notesmem — cardmem-managed
+# notesmem
 
-This repo is managed via [cardmem](https://cardmem.com). The canonical
-CLAUDE.md sections (`## Project layout`, `## Working with cardmem`),
-`.mcp.json`, `.claude/skills/`, and hooks are installed by the cardmem
-daemon scaffold on first local clone — this stub is just the seed so the
-repo is non-empty at creation. Run the daemon scaffold (or re-audit in
-cardmem Settings) to complete setup.
+**notesmem** is a bidirectional signal hub: an ultra-thin native capture app
+(Swift iOS + Kotlin Android) plus a thin Bun/Hono cloud that fans notes & ideas
+out to configurable REST adapters (cardmem Inbox, trail, Notion, Slack, …) and —
+Phase 2 — an inbound push gateway (APN/FCM) delivering notifications to phone +
+Apple Watch. Full vision: `docs/features/F00-notesmem-overview.md`.
+
+Managed via [cardmem](https://cardmem.com): F-numbered plan-docs in
+`docs/features/`, board at cardmem.com → notesmem.
 
 ## Project layout
 
-> **Fill this in for THIS repo.** Every cardmem-compatible repo MUST have a `## Project layout` section with the columns `Area | Path | Notes`. The cardmem Init flow (or the `feature` skill) populates it from the repo's actual structure — replace the example rows below.
+pnpm-workspaces + Turbo monorepo. The TS side (`apps/cloud`, `apps/dashboard`,
+`apps/mcp`, `packages/*`) is managed by pnpm; the native apps are colocated in
+the same repo but built with Xcode/Gradle (NOT pnpm workspaces).
 
 | Area | Path | Notes |
 |---|---|---|
-| _(example — replace)_ App | `src/` | Main application code |
-| _(example — replace)_ Tests | `tests/` | Test suites |
-
-Replace the example rows above with this repo's real layout before relying on cardmem skills to scope changes.
+| Cloud API | `apps/cloud/` | Bun + Hono — ingest (`/ingest`), fan-out engine, R2 upload (`/uploads/presign`), `/health` |
+| DB schema + migrations | `apps/cloud/src/db/`, `apps/cloud/drizzle/` | Drizzle over bun:sqlite (notes, attachments, deliveries, adapters) |
+| Object storage | `apps/cloud/src/storage.ts` | Cloudflare R2 (EU/EEUR) via Bun's native S3 client |
+| Shared types | `packages/shared/` | Zod schemas: Note, Attachment, Delivery, Adapter |
+| Adapters | `packages/adapters/` | AdapterDriver framework + cardmem + generic URL+token drivers |
+| Dashboard | `apps/dashboard/` | Preact config UI — Apple+Google OAuth, adapter CRUD, QR pairing (planned, F05) |
+| MCP server | `apps/mcp/` | Configure the cloud via MCP tools (planned, F06) |
+| iOS app | `apps/ios/` | Swift capture client (planned, F07) — colocated, not a pnpm workspace |
+| Android app | `apps/android/` | Kotlin capture client (planned, F08) — colocated, not a pnpm workspace |
+| Plan-docs | `docs/features/` | F00 overview + F01–F15 plan-docs |
 
 
 ## Working with cardmem
