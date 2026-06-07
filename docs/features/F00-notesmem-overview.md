@@ -62,9 +62,9 @@ read/write the same cloud state.
 delivery log, and retry — so the app only ever knows ONE address, and you can add
 or reconfigure adapters without shipping an app update.
 
-**Storage:** bun:sqlite for metadata + delivery log; **Tigris** (S3-compatible
-object storage) for image/attachment blobs (notesmem hosts the canonical blob and
-passes an `image_url` to adapters).
+**Storage:** bun:sqlite for metadata + delivery log; **Cloudflare R2** (EU/EEUR,
+S3-compatible object storage) for image/attachment blobs (notesmem hosts the
+canonical blob and passes an `image_url` to adapters).
 
 **Deploy:** Fly.io, region `arn` (Stockholm).
 
@@ -84,7 +84,7 @@ Every adapter has a **name**. A note carries `text + tags + image_url(s)`.
 
 | F | Epic |
 |---|---|
-| F01 | Cloud core — ingest API, note/attachment model, Tigris blobs, SQLite, backup |
+| F01 | Cloud core — ingest API, note/attachment model, R2 blobs, SQLite, backup |
 | F02 | Adapter framework + routing — named adapters, default fan-out, `@target`, delivery log + retry, attachment forwarding |
 | F03 | Cardmem Inbox adapter — reference adapter, the screenshot→plan&build flagship (✅ contract live-verified) |
 | F04 | Default outbound adapters — trail, Notion, Slack, Todoist, Telegram, Readwise, Linear, Discord, Airtable, generic webhook, email, Zapier/Make |
